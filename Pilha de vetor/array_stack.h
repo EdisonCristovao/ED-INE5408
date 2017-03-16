@@ -1,11 +1,10 @@
-/* Copyright 2017 xyz*/
+/* Copyright 2017 - Edison Junior*/
 
-#ifndef STRUCTURES_ARRAY_STACK_H
-#define STRUCTURES_ARRAY_STACK_H
+#ifndef STRUCTURES_ARRAY_STACK_H  // coments
+#define STRUCTURES_ARRAY_STACK_H  // coments
 
 #include <cstdint>  // std::size_t
 #include <stdexcept>  // C++ exceptions
-#include "gtest/gtest.h"
 
 namespace structures {
 
