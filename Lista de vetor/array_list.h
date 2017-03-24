@@ -130,29 +130,28 @@ class ArrayList {
     std::size_t max_size() const;
 
     //! Metodo at()
-      /*!
-      *
+      /*!  Retorna o dado armazenado em uma posição
+      *    \param index tipo size_t indice do dado a ser retornado
       */
 
     T& at(std::size_t index);
 
     //! Metodo operator[]()
-      /*!
-      *
+      /*!  implementa a funcionalidade de vetor na função
+      *    \param index tipo size_t indice do dado a ser retornado
       */
 
     T& operator[](std::size_t index);
 
-    //! Metodo at[]()
-      /*!
-      *
+    //! Metodo at()
+      /*!  Retorna o dado armazenado em uma posição
+      *    \param index tipo size_t indice do dado a ser retornado
       */
-
     const T& at(std::size_t index) const;
 
-    //! Metodo operator()
-      /*!
-      *
+    //! Metodo operator[]()
+      /*!  implementa a funcionalidade de vetor na função
+      *    \param index tipo size_t indice do dado a ser retornado
       */
     const T& operator[](std::size_t index) const;
 
