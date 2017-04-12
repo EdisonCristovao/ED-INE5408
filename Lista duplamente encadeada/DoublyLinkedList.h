@@ -8,7 +8,7 @@
 
 
 namespace structures {
-//!   Classe ArrayList
+//!   Classe DoublyLinkedList
     /*!   Classe generaliza estruturas para armazenar.
     */
 template<typename T>
@@ -168,7 +168,7 @@ class DoublyLinkedList {
 
     Node* node(std::size_t index) {
         Node* node = head;
-        for (auto i = 1; i != size(); i++) {
+        for (auto i = 0; i < size(); i++) {
             if (i == index) {
                 return node;
             }
@@ -195,7 +195,7 @@ structures::DoublyLinkedList<T>::~DoublyLinkedList() {  // ok
 
 template<typename T>
 void structures::DoublyLinkedList<T>::clear() {  // ok
-    if (!empty()) {
+    while (!empty()) {
         pop_front();
     }
 }
@@ -214,6 +214,7 @@ void structures::DoublyLinkedList<T>::push_front(const T& data) {
         if (head != nullptr) {
             head->prev(novo);
         }
+        head = novo;
         size_++;
     }
 }
@@ -223,10 +224,13 @@ void structures::DoublyLinkedList<T>::insert(const T& data, std::size_t index) {
     Node* novo = new Node(data);
     Node* before;
     if (novo == nullptr) {
+        delete novo;
         throw(std::out_of_range("Lista Cheia"));
     } else if (index == 0) {
+        delete novo;
         push_front(data);
-    } else if (index > size_+1) {
+    } else if (index > size_) {
+        delete novo;
         throw(std::out_of_range("Indice incorreto"));
     } else {
         before = node(index-1);
@@ -242,26 +246,47 @@ void structures::DoublyLinkedList<T>::insert(const T& data, std::size_t index) {
 
 template<typename T>
 void structures::DoublyLinkedList<T>::insert_sorted(const T& data) {
+      if (empty()) {
+        push_front(data);
+    } else {
+        Node* before = head;
+        for (auto i = 0; i != size_; i++) {
+            if (before->data() > data) {
+                insert(data, i);
+                break;
+            } else if (i == size_ -1) {
+                push_back(data);
+                break;
+            } else {
+                before = before->next();
+            }
+        }
+    }
 }
 
 template<typename T>
 T structures::DoublyLinkedList<T>::pop(std::size_t index) {
-    Node *sai, *before;
+    Node *sai, *before, *after;
     T dado;
     if (empty()) {
         throw(std::out_of_range("Lista vazia"));
     } else if (index == 0) {
-        pop_front();
-    } else if (index > size_) {
+        dado = pop_front();
+    } else if (index > size_-1) {
         throw(std::out_of_range("Indice incorreto"));
     } else {
        sai = node(index);
+       after = sai->next();
        before = sai->prev();
-       before->next(sai->next());
-       sai->next()->prev(before);
-       dado = sai->data();
-       delete sai;
-       size_--;
+      if (before != nullptr) {
+          before->next(after);
+      }
+      if (after != nullptr) {
+        after->prev(before);
+      }
+      dado = sai->data();
+      delete sai;
+      size_--;
     }
     return dado;
 }
@@ -314,6 +339,30 @@ bool structures::DoublyLinkedList<T>::contains(const T& data) const {
             verifica = verifica->next();
         }
     return false;
+    }
+}
+
+template<typename T>
+T& structures::DoublyLinkedList<T>::at(std::size_t index) {
+    if (index > size_) {
+        throw(std::out_of_range("Erro Lista Cheia"));
+    } else if (empty()) {
+        throw(std::out_of_range("Erro Lista vazia"));
+    } else {
+        Node* nodee = node(index);
+        return nodee->data();
+    }
+}
+
+template<typename T>
+const T& structures::DoublyLinkedList<T>::at(std::size_t index) const {
+    if (index > size_) {
+        throw(std::out_of_range("Erro Lista Cheia"));
+    } else if (empty()) {
+        throw(std::out_of_range("Erro Lista vazia"));
+    } else {
+        Node* node = node(index);
+        return node->data();
     }
 }
 
