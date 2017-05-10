@@ -169,3 +169,7 @@ void structures::ArrayQueue<T>::move_foward(){
 
 
 #endif
+
+
+
+i = 2
