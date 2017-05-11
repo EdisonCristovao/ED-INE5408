@@ -52,16 +52,20 @@ class CircularList {
 
     //! .
 	void insert_sorted(const T& data) {
-	    if (empty() || head->next()->data() >= data) {
+	    if (empty() || maior(head->next()->data(), data)) {
 	    	insert(data, 0);
 	    } else {
 		auto previous = head->next();
-		while (previous->next() != head && previous->next()->data() < data)
+		while (previous->next() != head && menor(previous->next()->data() , data))
 			previous = previous->next();
 		previous->next(new Node(data, previous->next()));
 		++size_;
 	    }
+
 	}
+
+
+
 
     //! .
     T& at(std::size_t index) {
@@ -140,6 +144,18 @@ class CircularList {
 		return size_ == 0;
 	}
 
+    bool igual(T dado1, T dado2) const {
+    	return dado1 == dado2;
+    }
+
+    virtual bool maior(T dado1, T dado2) {
+    	return dado1 > dado2;
+    }
+
+    virtual bool menor(T dado1, T dado2) {
+    	return dado1 < dado2;
+    }
+
     //! .
     bool contains(const T& data) const {
         auto element = head;
@@ -160,6 +176,37 @@ class CircularList {
         }
         return index;
     }
+
+    const T& operator[](std::size_t index) const {
+    	if (index > size_) {
+    	        throw(std::out_of_range("Erro Lista Cheia"));
+    	    } else if (empty()) {
+    	        throw(std::out_of_range("Erro Lista vazia"));
+    	    } else {
+    	          Node* node = head;
+    	          for (auto i = 0u; i != index; i++) {
+    	              node = node->next();
+    	          }
+    	        // node = current(index+1);
+    	        return node->data();
+    	    }
+    }
+
+    T& operator[](std::size_t index) {
+    	if (index > size_) {
+    	        throw(std::out_of_range("Erro Lista Cheia"));
+    	    } else if (empty()) {
+    	        throw(std::out_of_range("Erro Lista vazia"));
+    	    } else {
+    	          Node* node = head;
+    	          for (auto i = 0u; i != index; i++) {
+    	              node = node->next();
+    	          }
+    	        // node = current(index+1);
+    	        return node->data();
+    	    }
+    }
+
 
     //! .
     std::size_t size() const {
@@ -203,4 +250,3 @@ class CircularList {
 };
 
 #endif
-
