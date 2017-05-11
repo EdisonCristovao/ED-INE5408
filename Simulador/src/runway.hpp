@@ -8,27 +8,27 @@
 
 class Runway: public LinkedQueue<Vehicle*> {
 private:
-	int distance_ { 0 };  //!< the length of runway
+	int distance_;  //!< the length of runway
 
-	int velocity_ { 0 };  //!< velocity of vehicles in runway
+	int velocity_;  //!< velocity of vehicles in runway
 
-	int distance_busy_ { 0 };
+	int distance_busy_;
 
-	int frequency_ { 0 };
+	int frequency_;
 
-	int frequency_vari_ { 0 };
+	int frequency_vari_ ;
 
-	int vehicle_passes_ { 0 };
+	int vehicle_passes_ ;
 
-	int vehicle_created_ { 0 };
+	int vehicle_created_;
 
-	int vehicle_deleted_ { 0 };
+	int vehicle_deleted_;
 
-	int time_arrived_ { 0 };
+	int time_arrived_;
 
-	bool disappear_ { false };
+	bool disappear_;
 
-	bool appear_ { false };
+	bool appear_;
 
 public:
 	Runway(int distance, int velocity, int frequency, int frequency_vari);
@@ -94,8 +94,8 @@ Runway::Runway(int distance, int velocity, int frequency, int frequency_vari) {
 	}
 }
 
-int Runway::next_vehicle(int tempoAtual) {
-	return (tempoAtual + (frequency_ - frequency_vari_)
+int Runway::next_vehicle(int actual_time) {
+	return (actual_time + (frequency_ - frequency_vari_)
 			+ (rand() % (frequency_vari_ * 2)) + 1);
 	// verificar conta
 }
@@ -116,7 +116,7 @@ void Runway::add_Vehicle(Vehicle* v) {
 Vehicle* Runway::remove_Vehicle() {
 	Vehicle* v = dequeue();
 	distance_busy_ -= v->size();
-	if(disappear_) {
+	if(disappear()) {
 		vehicle_deleted_++;
 	}
 	return v;
@@ -129,7 +129,6 @@ int Runway::time_arrived(int actual_time) {
 bool Runway::runway_full(Vehicle* v) {
 	return distance_busy_ + v->size() > distance_;
 }
-
 
 bool Runway::font() {
 	return appear_;

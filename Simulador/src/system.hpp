@@ -67,7 +67,6 @@ System::System(int time_simulation, int time_semaphore) {
 	actual_time_ = 0;
 	vehicle_deleted_ = 0;
 	vehicle_created_ = 0;
-	vehicle_passes_ = 0;
 
 	init_component();
 }
@@ -173,7 +172,7 @@ void System::init_component() {
 
 void System::init_event_create_vehicle() {
 	Runway* runway;
-		Event* novoEvent;
+		Event* newEvent;
 
 		int time_inter_control;
 		int time_next_event;
@@ -190,8 +189,8 @@ void System::init_event_create_vehicle() {
 					time_next_event = runway->next_vehicle(time_inter_control);
 					if(time_next_event <= time_simulation_) {
 
-						novoEvent = new Event(time_next_event, 1, new Vehicle(), runway);
-						events_->insert_sorted(novoEvent);
+						newEvent = new Event(time_next_event, 1, new Vehicle(), runway);
+						events_->insert_sorted(newEvent);
 						time_inter_control = time_next_event;
 
 					} else {
@@ -205,26 +204,26 @@ void System::init_event_create_vehicle() {
 
 void System::init_event_arrive_semaphore() {
 
-	Event* novoEvent;
+	Event* newEvent;
 	Runway* runway;
-	Semaphore* semaforo;
+	Semaphore* semaphore;
 
 	int time_next_event;
-	int tempoCriado;
+	int time_created;
 
 	for (int i = 0; i < events_->size(); i++) {
 
 		Event* eventAux = events_->at(i);
 		if(eventAux->category() == 1) {
-			tempoCriado = eventAux->time();
+			time_created = eventAux->time();
 			runway = (Runway*) eventAux->attrib();
-			semaforo = (Semaphore*) semaphore_location(runway);
+			semaphore = (Semaphore*) semaphore_location(runway);
 
-			time_next_event = runway->time_arrived(tempoCriado);
+			time_next_event = runway->time_arrived(time_created);
 
 			if (time_next_event <= time_simulation_) {
-				novoEvent = new Event(time_next_event, 3, semaforo, 0);
-				events_->insert_sorted(novoEvent);
+				newEvent = new Event(time_next_event, 3, semaphore, 0);
+				events_->insert_sorted(newEvent);
 			}
 		}
 	}
@@ -308,25 +307,16 @@ void System::treat_event_chage_runway(Event* event_oc) {
 
             if (runwayDestino->disappear()) {
             	Vehicle* vehicle = ((Runway*)semaforo->runway_control())->remove_Vehicle();
-            	//Carro* carro = (Carro*) ((Runway*)semaforo->runwayControlada())->retira();
-            	//semaforo->runwayControlada()->liberaEspaco(carro);
 
             	runwayDestino->add_Vehicle(vehicle);
-            	//runwayDestino->inclui( carro );
-            	//runwayDestino->encheEspaco(carro);
 
                 time_next_event = runwayDestino->time_arrived(actual_time_);
                 event = new Event(time_next_event, 2, runwayDestino, 0);
 
             } else {
             	Vehicle* vehicle = ((Runway*)semaforo->runway_control())->remove_Vehicle();
-				//Carro* carro = (Carro*) ((Runway*)semaforo->runwayControlada())->retira();
-            	//semaforo->runwayControlada()->liberaEspaco(carro);
 
             	runwayDestino->add_Vehicle(vehicle);
-            	//runwayDestino->inclui( carro );
-            	//runwayDestino->encheEspaco(carro);
-            	//runwayDestino->addCarrosPassantes();
 
                 time_next_event = runwayDestino->time_arrived(actual_time_);
                 event = new Event(time_next_event, 3, semaphore_location(runwayDestino), 0);
@@ -396,14 +386,14 @@ void System::exit() {
 		runway = runway_->at(i);
 
 		std::cout << "---- Runway [" << i << "] ---- " << std::endl;
-		std::cout << "Tamanho :" << runway->size() << std::endl;
+		std::cout << "Tamanho :" << runway->distance() << std::endl;
 		std::cout << "Carros deletados :" << runway->vehicles_deleted() << std::endl;
 		std::cout << "Carros criados :" << runway->vehicles_created() << std::endl;
 		std::cout << "Carros passantes :" << runway->vehicles_passed() << std::endl;
 		std::cout << "Espaco usado :" << runway->distance_busy() << std::endl;
 		espacoCarros = 0;
 
-		for (int j = 0; j < runway->size(); j++) {
+		for (int j = 0; j < runway->distance(); j++) {
 			if(!runway->empty()) {
 				Vehicle* vehicle2 = ((Vehicle*)runway->dequeue());
 				std::cout << "Carro [" << j << "] tamanho = " << vehicle2->size() << std::endl;

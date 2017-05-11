@@ -10,14 +10,14 @@
 #include "system.hpp"
 
 int main() {
-	int tempoSemaforoFicaraAberto, tempoDeSimulacao;
+	int time_simulation, time_semaphore_open;
 
-	std::cout << "Informe o tempo da simulação (s) : " << std::endl;
-	std::cin >> tempoDeSimulacao;
+	std::cout << "Tempo de simulação (Em segundos) : " << std::endl;
+	std::cin >> time_simulation;
 
-	std::cout << "Informe o tempo que os semáforos ficam abertos (s) : " << std::endl;
-	std::cin >> tempoSemaforoFicaraAberto;
+	std::cout << "Tempo em que o semaforo esta aerto (Em segundos) : " << std::endl;
+	std::cin >> time_semaphore_open;
 
-	System* s1 = new System(tempoDeSimulacao, tempoSemaforoFicaraAberto);
+	System* s1 = new System(time_simulation, time_semaphore_open);
 	s1->exe();
 }

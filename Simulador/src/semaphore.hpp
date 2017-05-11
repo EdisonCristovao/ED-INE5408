@@ -69,7 +69,7 @@ Runway* Semaphore::chage_vehicle_runway() {
 
 	if (runway_destiny <= probability_[0]) {
 		destiny = runway_out_->at(0);
-		if (!destiny->runway_full(vehicle)) {
+		if (destiny->runway_full(vehicle)==false) {
 			return destiny;
 		} else {
 			destiny = runway_control_;
@@ -78,7 +78,7 @@ Runway* Semaphore::chage_vehicle_runway() {
 	} else {
 		int random = (rand() % 2) + 1;
 		destiny = runway_out_->at(random);
-		if (!destiny->runway_full(vehicle)) {
+		if (destiny->runway_full(vehicle)==false) {
 			return destiny;
 		} else {
 			destiny = runway_control_;
